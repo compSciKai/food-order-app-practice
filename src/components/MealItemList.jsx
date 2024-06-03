@@ -1,16 +1,18 @@
-import { useEffect } from "react";
-import { useState } from "react"
+import { useContext } from "react";
 import { useFetch } from "../hooks/useFetch";
 import { fetchMeals } from "../requests";
 
 import Meal from "../components/Meal";
+import { CartContext } from "../store/cart-context";
 
-export default function MealItemList({onAddToCart}) {
+
+export default function MealItemList() {
     const {
         isFetching,
         error, 
         fetchedData: meals
     } = useFetch(fetchMeals, []);
+    const { addItemToCart } = useContext(CartContext);
 
     const showMeals = !isFetching && meals.length;
     
@@ -21,7 +23,7 @@ export default function MealItemList({onAddToCart}) {
             description={meal.description}
             name={meal.name}
             price={meal.price}
-            onAddToCart={() => {onAddToCart(meal)}}
+            onAddToCart={() => {addItemToCart(meal)}}
         /> )}
         </div>;
 }

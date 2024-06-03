@@ -1,9 +1,47 @@
+import { useState } from 'react';
+
+import Header from './components/Header'
+import MealItemList from './components/MealItemList'
+
 function App() {
+  const [cart, setCart] = useState({
+    items: []
+  });
+
+  const handleAddToCart = (meal) => {
+    setCart(prevCart => { 
+      const updatedItems = [...prevCart.items];
+
+      const existingItemIndex = updatedItems.findIndex(
+        item => item.id === meal.id
+      )
+
+      const existingItem = updatedItems[existingItemIndex]; 
+      if (existingItem) {
+        const updatedItem = {
+          ...existingItem,
+          quantity: ++existingItem.quantity
+        }
+
+        updatedItem[existingItem] = updatedItem;
+      } else {
+        updatedItems.push({
+          id: meal.id,
+          name: meal.name,
+          price: meal.price,
+          quantity: 1
+        });
+      }
+
+      return { items: updatedItems };
+    });
+  }
+
+  const count = cart?.items.length;
   return (
     <>
-      <h1>You got this 💪</h1>
-      <p>Stuck? Not sure how to proceed?</p>
-      <p>Don't worry - we've all been there. Let's build it together!</p>
+      <Header cartItemCount={count} />
+      <MealItemList onAddToCart={handleAddToCart} />
     </>
   );
 }

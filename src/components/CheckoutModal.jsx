@@ -77,7 +77,7 @@ export default function CheckoutModal() {
     return <dialog open={isCheckoutOpen} className='modal'>
         <form className="cart" onSubmit={handleSubmit}>
             <h2>Checkout</h2>
-            <p>Total Amount: ${subTotal}</p>
+            <p>Total Amount: ${subTotal.toFixed(2)}</p>
             <Input
                 label="Full Name"
                 id="name"

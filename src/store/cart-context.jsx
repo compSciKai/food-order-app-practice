@@ -29,23 +29,24 @@ export default function CartContextProvider({children}) {
     const handleReduceQuantity = (id) => {
         setCart(prevCart => {
             const updatedItems = [...prevCart.items];
-            const currentItem = updatedItems.find(item => item.id === id);
-            debugger;
-            // add or remove quantity
+            const updatedItemIndex = updatedItems.findIndex(
+                (item) => item.id === id
+              );
+            
+            const currentItem = {
+                ...updatedItems[updatedItemIndex]
+            };
+
             currentItem.quantity = currentItem.quantity - 1;
-    
-            // if less than zero -> remove item
             if (currentItem.quantity <= 0) {
                 return {
                     items: updatedItems.filter(item => item.id !== id)
                 };
             }
     
-            updatedItems[id] = currentItem;
+            updatedItems[updatedItemIndex] = currentItem;
     
-            return {
-                items: updatedItems
-            };
+            return { items: updatedItems };
         });
     }
 

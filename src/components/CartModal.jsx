@@ -10,14 +10,16 @@ export default function CartModal() {
     } = useContext(CartContext);
 
     const subTotal = items.reduce(
-        (accum, currentValue) => accum + (currentValue.price * currentValue.quantity), 0
+        (accum, currentValue) => 
+        accum + (currentValue.price * currentValue.quantity), 
+        0
     );
 
     return <dialog open={isCartOpen} className='modal'>
         <div className="cart">
             <h2>Your Cart</h2>
             <ul>{renderCartItems(items)}</ul>  
-            <div className="cart-total">${subTotal}</div>
+            <div className="cart-total">${subTotal.toFixed(2)}</div>
             <div className="modal-actions">
                 <button className='text-button' onClick={toggleCartModal}>Close</button>
                 <button className='button' onClick={toggleCheckoutModal}>Go to Checkout</button>

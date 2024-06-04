@@ -20,7 +20,7 @@ export default function CheckoutModal() {
         handleInputBlur: handleNameBlur,
         reset: resetNameValue,
         hasError: nameHasError,
-    } = useInput('', (value) => isNotEmpty(value));
+    } = useInput('', isNotEmpty);
 
     const {
         value: streetValue,
@@ -28,15 +28,16 @@ export default function CheckoutModal() {
         handleInputBlur: handleStreetBlur,
         reset: resetStreetValue,
         hasError: streetHasError,
-    } = useInput('', (value) => isNotEmpty(value));
+    } = useInput('', isNotEmpty);
 
+    const validateEmailField = (value) => isNotEmpty(value) && isEmail(value)
     const {
         value: emailValue,
         handleInputChange: handleEmailChange,
         handleInputBlur: handleEmailBlur,
         reset: resetEmailValue,
         hasError: emailHasError,
-    } = useInput('', (value) => isNotEmpty(value) && isEmail(value));
+    } = useInput('', validateEmailField);
 
     const {
         value: postalCodeValue,
@@ -44,7 +45,7 @@ export default function CheckoutModal() {
         handleInputBlur: handlePostalCodeBlur,
         reset: resetPostalCodeValue,
         hasError: postalCodeHasError,
-    } = useInput('', (value) => isNotEmpty(value));
+    } = useInput('', isNotEmpty);
 
     const {
         value: cityValue,
@@ -52,11 +53,19 @@ export default function CheckoutModal() {
         handleInputBlur: handleCityBlur,
         reset: resetCityValue,
         hasError: cityHasError,
-    } = useInput('', (value) => isNotEmpty(value));
+    } = useInput('', isNotEmpty);
 
     const subTotal = items.reduce(
         (accum, currentValue) => accum + (currentValue.price * currentValue.quantity), 0
     );
+
+    const validateAllFields = () => {
+        return isNotEmpty(nameValue) 
+            && isNotEmpty(streetValue) 
+            && isNotEmpty(postalCodeValue)
+            && isNotEmpty(cityValue)
+            && validateEmailField(emailValue);
+    }
 
     const handleSubmit = (event) => {
         const sendOrder = async (data) => {
@@ -66,9 +75,9 @@ export default function CheckoutModal() {
 
         event.preventDefault();
 
-        if (nameHasError || emailHasError || streetHasError || postalCodeHasError || cityHasError) {
-            console.log("Must fix errors before order can be submit");
-            return;
+        if (!validateAllFields()) {
+            console.log("Must check errors before continuing");
+            return
         }
 
         const data = {

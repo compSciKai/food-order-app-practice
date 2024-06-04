@@ -1,6 +1,11 @@
 import { useContext } from 'react';
 import { CartContext } from '../store/cart-context';
-import { postOrder } from '../requests';
+import { useInput } from '../hooks/useInput';
+
+import { postOrder } from '../utils/requests';
+import { isEmail, isNotEmpty } from '../utils/validation';
+
+import Input from './Input';
 
 export default function CheckoutModal() {
     const {
@@ -8,6 +13,41 @@ export default function CheckoutModal() {
         toggleCheckoutModal,
         items
     } = useContext(CartContext);
+
+    const {
+        value: nameValue,
+        handleInputChange: handleNameChange,
+        handleInputBlur: handleNameBlur,
+        hasError: nameHasError,
+    } = useInput('Kainoa Seaman', (value) => isNotEmpty(value));
+
+    const {
+        value: streetValue,
+        handleInputChange: handleStreetChange,
+        handleInputBlur: handleStreetBlur,
+        hasError: streetHasError,
+    } = useInput('123 Fake Street', (value) => isNotEmpty(value));
+
+    const {
+        value: emailValue,
+        handleInputChange: handleEmailChange,
+        handleInputBlur: handleEmailBlur,
+        hasError: emailHasError,
+    } = useInput('kaigra@icloud.com', (value) => isNotEmpty(value) && isEmail(value));
+
+    const {
+        value: postalCodeValue,
+        handleInputChange: handlePostalCodeChange,
+        handleInputBlur: handlePostalCodeBlur,
+        hasError: postalCodeHasError,
+    } = useInput('V3W 2B6', (value) => isNotEmpty(value));
+
+    const {
+        value: cityValue,
+        handleInputChange: handleCityChange,
+        handleInputBlur: handleCityBlur,
+        hasError: cityHasError,
+    } = useInput('Maple Ridge', (value) => isNotEmpty(value));
 
     const subTotal = items.reduce(
         (accum, currentValue) => accum + (currentValue.price * currentValue.quantity), 0
@@ -20,12 +60,17 @@ export default function CheckoutModal() {
         }
 
         event.preventDefault();
-        const fd = new FormData(event.target);
         const data = {
-            customer: Object.fromEntries(fd.entries())
+            customer: {
+                name: nameValue,
+                email: emailValue,
+                street: streetValue,
+                "postal-code": postalCodeValue,
+                city: cityValue
+            },
+            items
         };
 
-        data.items = items;
         sendOrder(data);
     }
 
@@ -33,27 +78,54 @@ export default function CheckoutModal() {
         <form className="cart" onSubmit={handleSubmit}>
             <h2>Checkout</h2>
             <p>Total Amount: ${subTotal}</p>
-            <div className="control">
-                <label htmlFor="name">Full Name</label>
-                <input type="text" name="name" id="name" />
-            </div>
-            <div className="control">
-                <label htmlFor="email">Email Address</label>
-                <input type="email" name="email" id="email" />
-            </div>
-            <div className="control">
-                <label htmlFor="street">Street</label>
-                <input type="text" name="street" id="street" />
-            </div>
+            <Input
+                label="Full Name"
+                id="name"
+                type="name"
+                onBlur={handleNameBlur}
+                onChange={handleNameChange}
+                value={nameValue}
+                error={nameHasError && 'Full name field must not be empty.'}
+            />
+            <Input
+                label="Email"
+                id="email"
+                type="email"
+                onBlur={handleEmailBlur}
+                onChange={handleEmailChange}
+                value={emailValue}
+                error={emailHasError && 'Email field must not be empty and email must contain an @ symbol.'}
+            />
+            <Input
+                label="Street"
+                id="street"
+                type="street"
+                onBlur={handleStreetBlur}
+                onChange={handleStreetChange}
+                value={streetValue}
+                error={streetHasError && 'Street field must not be empty.'}
+            />
             <div className="control-row">
-                <div className="control" style={{maxWidth: '200px'}}>
-                    <label htmlFor="postal-code">Postal Code</label>
-                    <input type="text" name="postal-code" id="postal-code" />
-                </div>
-                <div className="control" style={{maxWidth: '200px'}}>
-                    <label htmlFor="city">City</label>
-                    <input type="text" name="city" id="city" />
-                </div>                
+                <Input
+                    label="Postal Code"
+                    id="postal-code"
+                    type="postal-code"
+                    onBlur={handlePostalCodeBlur}
+                    onChange={handlePostalCodeChange}
+                    value={postalCodeValue}
+                    error={postalCodeHasError && 'Postal code field must not be empty.'}
+                    style={{maxWidth: '200px'}}
+                />
+                <Input
+                    label="City"
+                    id="city"
+                    type="city"
+                    onBlur={handleCityBlur}
+                    onChange={handleCityChange}
+                    value={cityValue}
+                    error={cityHasError && 'City field must not be empty.'}
+                    style={{maxWidth: '200px'}}
+                />              
             </div>
             <div className="modal-actions" style={{marginTop: '12px'}}>
                 <button className='text-button' onClick={toggleCheckoutModal}>Close</button>

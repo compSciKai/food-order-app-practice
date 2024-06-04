@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useFetch } from "../hooks/useFetch";
-import { fetchMeals } from "../requests";
+import { fetchMeals } from "../utils/requests";
 
 import Meal from "../components/Meal";
 import { CartContext } from "../store/cart-context";

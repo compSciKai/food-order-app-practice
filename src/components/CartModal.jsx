@@ -29,6 +29,7 @@ export default function CartModal() {
 const renderCartItems = () => {
     const {items, addItemToCart, reduceItemQuantity} = useContext(CartContext);
     return items.map(item => <CartItem
+        key={item.id}
         {...item}
         addItem={addItemToCart}
         removeItem={reduceItemQuantity}

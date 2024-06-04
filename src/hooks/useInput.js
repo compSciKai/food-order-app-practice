@@ -15,10 +15,16 @@ export function useInput(defaultValue, validationFn) {
     setDidEdit(true);
   }
 
+  function reset() {
+    setEnteredValue(defaultValue);
+    setDidEdit(false);
+  }
+
   return {
     value: enteredValue,
     handleInputChange,
     handleInputBlur,
+    reset,
     hasError: didEdit && !valueIsValid
   };
 }

@@ -18,6 +18,7 @@ export default function CheckoutModal() {
         value: nameValue,
         handleInputChange: handleNameChange,
         handleInputBlur: handleNameBlur,
+        reset: resetNameValue,
         hasError: nameHasError,
     } = useInput('', (value) => isNotEmpty(value));
 
@@ -25,6 +26,7 @@ export default function CheckoutModal() {
         value: streetValue,
         handleInputChange: handleStreetChange,
         handleInputBlur: handleStreetBlur,
+        reset: resetStreetValue,
         hasError: streetHasError,
     } = useInput('', (value) => isNotEmpty(value));
 
@@ -32,6 +34,7 @@ export default function CheckoutModal() {
         value: emailValue,
         handleInputChange: handleEmailChange,
         handleInputBlur: handleEmailBlur,
+        reset: resetEmailValue,
         hasError: emailHasError,
     } = useInput('', (value) => isNotEmpty(value) && isEmail(value));
 
@@ -39,6 +42,7 @@ export default function CheckoutModal() {
         value: postalCodeValue,
         handleInputChange: handlePostalCodeChange,
         handleInputBlur: handlePostalCodeBlur,
+        reset: resetPostalCodeValue,
         hasError: postalCodeHasError,
     } = useInput('', (value) => isNotEmpty(value));
 
@@ -46,6 +50,7 @@ export default function CheckoutModal() {
         value: cityValue,
         handleInputChange: handleCityChange,
         handleInputBlur: handleCityBlur,
+        reset: resetCityValue,
         hasError: cityHasError,
     } = useInput('', (value) => isNotEmpty(value));
 
@@ -60,6 +65,12 @@ export default function CheckoutModal() {
         }
 
         event.preventDefault();
+
+        if (nameHasError || emailHasError || streetHasError || postalCodeHasError || cityHasError) {
+            console.log("Must fix errors before order can be submit");
+            return;
+        }
+
         const data = {
             customer: {
                 name: nameValue,
@@ -72,6 +83,21 @@ export default function CheckoutModal() {
         };
 
         sendOrder(data);
+    }
+
+    const resetInputs = () => {
+        resetNameValue('');
+        resetEmailValue('');
+        resetStreetValue('');
+        resetPostalCodeValue('');
+        resetCityValue('');
+    }
+
+    const handleCloseCheckout = (event) => {
+        event.preventDefault();
+        resetInputs();
+
+        toggleCheckoutModal();
     }
 
     return <dialog open={isCheckoutOpen} className='modal'>
@@ -128,7 +154,7 @@ export default function CheckoutModal() {
                 />              
             </div>
             <div className="modal-actions" style={{marginTop: '12px'}}>
-                <button className='text-button' onClick={toggleCheckoutModal}>Close</button>
+                <button className='text-button' type='buton' onClick={handleCloseCheckout}>Close</button>
                 <button type='submit' className='button'>Submit Order</button>
             </div>          
         </form>

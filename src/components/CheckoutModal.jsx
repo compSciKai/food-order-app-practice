@@ -19,35 +19,35 @@ export default function CheckoutModal() {
         handleInputChange: handleNameChange,
         handleInputBlur: handleNameBlur,
         hasError: nameHasError,
-    } = useInput('Kainoa Seaman', (value) => isNotEmpty(value));
+    } = useInput('', (value) => isNotEmpty(value));
 
     const {
         value: streetValue,
         handleInputChange: handleStreetChange,
         handleInputBlur: handleStreetBlur,
         hasError: streetHasError,
-    } = useInput('123 Fake Street', (value) => isNotEmpty(value));
+    } = useInput('', (value) => isNotEmpty(value));
 
     const {
         value: emailValue,
         handleInputChange: handleEmailChange,
         handleInputBlur: handleEmailBlur,
         hasError: emailHasError,
-    } = useInput('kaigra@icloud.com', (value) => isNotEmpty(value) && isEmail(value));
+    } = useInput('', (value) => isNotEmpty(value) && isEmail(value));
 
     const {
         value: postalCodeValue,
         handleInputChange: handlePostalCodeChange,
         handleInputBlur: handlePostalCodeBlur,
         hasError: postalCodeHasError,
-    } = useInput('V3W 2B6', (value) => isNotEmpty(value));
+    } = useInput('', (value) => isNotEmpty(value));
 
     const {
         value: cityValue,
         handleInputChange: handleCityChange,
         handleInputBlur: handleCityBlur,
         hasError: cityHasError,
-    } = useInput('Maple Ridge', (value) => isNotEmpty(value));
+    } = useInput('', (value) => isNotEmpty(value));
 
     const subTotal = items.reduce(
         (accum, currentValue) => accum + (currentValue.price * currentValue.quantity), 0

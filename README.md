@@ -2,8 +2,7 @@ Started with files found here: [Food ordering app](https://github.com/academind/
 
 I challanged myself to complete the project without watching the instructor's solution.
 
+![order-app-walkthrough](https://github.com/compSciKai/food-order-app-practice/assets/13819445/c236e6e0-f2aa-4664-93c1-2973b6d8727d)
 
-
-https://github.com/compSciKai/food-order-app-practice/assets/13819445/d54200cb-6fb0-4014-b6e7-1caf2216c370
 
 
